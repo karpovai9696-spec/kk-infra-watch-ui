@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="ink">
+<head>
+<meta charset="UTF-8">
+<meta name="kk-api-base" content="https://a.mdlp.gk-kd.ru:24112">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ИТ-парк КК · мониторинг</title>
+<meta name="description" content="Сводный статус инфраструктуры и ИТ-парка КК: роутер и VPN, сайты, серверы, сервисы, рабочие станции сотрудников, склад, задачи и отчёты по парку.">
+<meta name="theme-color" content="#09090a">
+<link rel="preload" href="./assets/index-56cacaa1.css" as="style">
+<link rel="preload" href="./assets/app-f2b0e01e.js" as="script">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="./assets/fonts/playfair-display-cyrillic-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/playfair-display-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/playfair-display-cyrillic-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/playfair-display-latin-italic.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/marck-script-cyrillic-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/marck-script-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/inter-cyrillic-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/inter-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/jetbrains-mono-cyrillic-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./assets/fonts/jetbrains-mono-latin-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" crossorigin href="./assets/index-56cacaa1.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23B4491A'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='18' fill='%23fffcf5' text-anchor='middle'%3EK%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+<!--BOOT-->
+<a class="skiplink" href="#main">К содержимому</a>
+<div class="app page">
+
+  <header class="top">
+    <div class="top__brand">
+      <span class="top__mark">К</span>
+      <span class="top__name">KK · Infra Watch</span>
+      <span class="top__pulse" id="pulse" data-state="ok"></span>
+      <span class="top__state" id="state">загрузка…</span>
+    </div>
+
+    <div class="summary sumbar" id="summary" role="group" aria-label="Сводка состояния: в норме, внимание, недоступно"></div>
+
+    <div class="top__right">
+      <div class="clock">
+        <div class="clock__time" id="clock-time">--:--</div>
+        <div class="clock__date" id="clock-date"></div>
+      </div>
+      <button class="chip" id="refresh" type="button" title="Обновить данные (клавиша r)">
+        <svg viewBox="0 0 24 24" aria-hidden="true" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 3v6h-6"/></svg>
+        <span>обновить</span>
+      </button>
+      <button class="chip" id="theme" type="button" aria-pressed="true">чернила</button>
+      <button class="chip" id="anim" type="button" aria-pressed="false">анимация: вкл</button>
+      <div class="profile" id="profile">
+        <button class="profile__btn" id="profile-btn" type="button" aria-expanded="false" aria-controls="profile-menu">
+          <span class="profile__ava" id="profile-ava">МК</span>
+          <span class="profile__meta">
+            <span class="profile__name" id="profile-name">Михаил Карпов</span>
+            <span class="profile__role" id="profile-role">владелец</span>
+          </span>
+        </button>
+        <div class="profile__menu" id="profile-menu" hidden>
+          <div class="profile__row"><span class="profile__key">Логин</span><span class="profile__val" id="profile-login">—</span></div>
+          <div class="profile__row"><span class="profile__key">Роли</span><span class="profile__val">owner · admin</span></div>
+          <label class="profile__row"><span class="profile__key">Компания</span>
+            <select class="pcedit-field__input" id="profile-company"></select>
+          </label>
+          <label class="profile__row"><span class="profile__key">Филиал</span>
+            <select class="pcedit-field__input" id="profile-branch"></select>
+          </label>
+          <p class="profile__note">Профиль, роли и список компаний — заглушка: серверный API пользователей и филиалов ещё не выложен. Переключение фильтрует парк на этом экране.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app__body">
+    <nav class="sidenav" id="nav" aria-label="Разделы дашборда">
+      <button class="navitem" id="nav-overview" type="button" aria-current="page"><span class="navitem__label">Обзор</span></button>
+      <button class="navitem" id="nav-fleet" type="button"><span class="navitem__label">Парк ПК</span><span class="navitem__count" id="nav-fleet-count">—</span></button>
+      <button class="navitem" id="nav-warehouse" type="button"><span class="navitem__label">Склад</span><span class="navitem__soon">скоро</span></button>
+      <button class="navitem" id="nav-tasks" type="button"><span class="navitem__label">Задачи</span><span class="navitem__soon">скоро</span></button>
+      <button class="navitem" id="nav-reports" type="button"><span class="navitem__label">Отчёты</span></button>
+    </nav>
+
+    <main class="app__main" id="main">
+
+      <!-- ============ ОБЗОР ============ -->
+      <section class="section" id="sec-overview" aria-labelledby="ov-title">
+        <div class="hero">
+          <h1 class="title" id="ov-title">Мониторинг <em>парка.</em></h1>
+          <p class="lede">Инфраструктура и ИТ-парк КК: кто упал, где сотрудник не может работать, что чинить, заменять и заказывать со склада.</p>
+        </div>
+
+        <h2 class="section__title">Быстрый ответ</h2>
+        <div class="quickgrid" id="ov-quick"></div>
+
+        <h2 class="section__title">Компании</h2>
+        <div class="ovgrid" id="ov-tiles"></div>
+
+        <div class="section__head">
+          <h2 class="section__title">Топ проблем по парку</h2>
+          <span class="section__note" id="ov-issues-note"></span>
+        </div>
+        <div class="problist" id="ov-issues"></div>
+
+        <details class="ovinfra" id="ov-infra">
+          <summary class="ovinfra__sum">
+            <span class="ovinfra__title">Инфраструктура и сервисы</span>
+            <span class="section__note" id="updated">—</span>
+          </summary>
+          <div class="board" id="board"></div>
+        </details>
+      </section>
+
+      <!-- ============ ПАРК ПК ============ -->
+      <section class="section" id="sec-fleet" hidden aria-labelledby="fleet-title">
+        <div class="section__head">
+          <h2 class="section__title" id="fleet-title">Парк ПК</h2>
+          <div class="section__tools">
+            <span class="section__note" id="fleet-updated">—</span>
+            <button class="ghostbtn" id="pc-add" type="button">+ Добавить ПК</button>
+          </div>
+        </div>
+
+        <div class="controls controls--fleet">
+          <label class="search">
+            <input id="search" type="search" placeholder="Поиск: сотрудник, хост, IP  ( / )" autocomplete="off" aria-label="Поиск по парку">
+          </label>
+          <div class="seg" id="orgs" role="group" aria-label="Компания"></div>
+          <label class="sel"><span class="sel__k">Филиал</span><select class="sel__input" id="filter-branch"></select></label>
+          <label class="sel"><span class="sel__k">Статус</span>
+            <select class="sel__input" id="filter-status">
+              <option value="all">все</option>
+              <option value="ok">в норме</option>
+              <option value="degraded">внимание</option>
+              <option value="down">недоступно</option>
+              <option value="pending">ожидает</option>
+            </select>
+          </label>
+          <button class="ghostbtn" id="filter-issues" type="button" aria-pressed="false">только с проблемами</button>
+          <button class="ghostbtn" id="filter-reset" type="button">сбросить фильтры</button>
+        </div>
+
+        <div class="fleet" id="park"></div>
+      </section>
+
+      <!-- ============ СКЛАД (заглушка) ============ -->
+      <section class="section" id="sec-warehouse" hidden aria-labelledby="wh-title">
+        <div class="section__head">
+          <h2 class="section__title" id="wh-title">Склад комплектующих</h2>
+          <span class="section__note">раздел в разработке</span>
+        </div>
+        <div class="soon">
+          <p class="soon__lead">Склад показывает, что можно поставить на машину прямо сейчас: остаток планок ОЗУ, накопителей и мониторов, а также что уже заказано.</p>
+          <div class="whlist" id="wh-list"></div>
+          <p class="soon__note" id="wh-note"></p>
+          <button class="ghostbtn" id="wh-probe" type="button">проверить готовность API</button>
+        </div>
+      </section>
+
+      <!-- ============ ЗАДАЧИ (заглушка) ============ -->
+      <section class="section" id="sec-tasks" hidden aria-labelledby="task-title">
+        <div class="section__head">
+          <h2 class="section__title" id="task-title">Задачи по ПК</h2>
+          <span class="section__note">раздел в разработке</span>
+        </div>
+        <div class="soon">
+          <p class="soon__lead">Здесь будут задачи, запущенные на машинах: чистка диска, диагностика, установка программы, обновление драйверов, перезагрузка — с журналом и результатом.</p>
+          <div class="whlist" id="task-list"></div>
+          <p class="soon__note" id="task-note"></p>
+          <button class="ghostbtn" id="task-probe" type="button">проверить готовность API</button>
+        </div>
+      </section>
+
+      <!-- ============ ОТЧЁТЫ ============ -->
+      <section class="section" id="sec-reports" hidden aria-labelledby="rep-title">
+        <div class="section__head">
+          <h2 class="section__title" id="rep-title">Отчёт по парку</h2>
+          <div class="section__tools">
+            <button class="ghostbtn" id="report-print" type="button">Печать</button>
+            <button class="ghostbtn" id="report-csv" type="button">Выгрузить CSV</button>
+          </div>
+        </div>
+        <div class="print-only print-head">
+          <h1>Отчёт по ИТ-парку КК</h1>
+          <p id="report-date"></p>
+        </div>
+        <div class="ovgrid ovgrid--tight" id="report-summary"></div>
+        <div class="tablewrap">
+          <table class="reptable" id="report-table"></table>
+        </div>
+        <p class="section__note print-hint">Отчёт собран на данных дашборда. Серверный отчёт (GET /api/report) появится вместе с API v3 — тогда в таблицу добавятся свободное место, дни без обновлений и полный список рекомендаций.</p>
+      </section>
+
+    </main>
+  </div>
+
+  <footer class="colophon">
+    <p>Опрос каждые 60 с · Keenetic RCI · HTTP-пробы · SSH/CIM · MeshCentral · только чтение, ничего не меняет.</p>
+    <p>KK — клиники диализа · ИТ-контур</p>
+  </footer>
+
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="./assets/app-f2b0e01e.js"></script>
+
+</body>
+</html>

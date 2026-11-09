@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вход — KK Infra Watch</title>
+<meta name="kk-api-base" content="">
+<link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/index-56cacaa1.css">
+<style>
+  body {
+    margin: 0; min-height: 100vh; display: grid; place-items: center;
+    background: #0b0d10; color: #e8eaed;
+    font: 15px/1.5 "Inter", "Segoe UI", system-ui, sans-serif;
+  }
+  .box {
+    width: min(420px, calc(100vw - 32px)); padding: 28px;
+    border: 1px solid #23262c; border-radius: 14px; background: #101317;
+  }
+  h1 { margin: 0 0 4px; font-size: 20px; letter-spacing: .02em; }
+  .sub { margin: 0 0 20px; color: #8b9098; font-size: 13px; }
+  label { display: block; margin: 14px 0 6px; font-size: 12px; color: #a8adb5; }
+  input {
+    width: 100%; padding: 10px 12px; border-radius: 8px;
+    border: 1px solid #2b2f36; background: #0b0d10; color: #e8eaed; font: inherit;
+  }
+  input:focus { outline: 2px solid #fcd116; outline-offset: 1px; }
+  button {
+    width: 100%; margin-top: 18px; padding: 11px; border: 0; border-radius: 8px;
+    background: #fcd116; color: #14161a; font: inherit; font-weight: 600; cursor: pointer;
+  }
+  button:disabled { opacity: .6; cursor: default; }
+  .msg { margin-top: 14px; min-height: 20px; font-size: 13px; color: #ff8a80; }
+  .hint { margin-top: 18px; padding-top: 14px; border-top: 1px solid #23262c; color: #7d838c; font-size: 12px; }
+  .hint code { color: #cfd3d9; }
+</style>
+</head>
+<body>
+<form class="box" id="form" autocomplete="off">
+  <h1>KK Infra Watch</h1>
+  <p class="sub">Доступ к мониторингу ИТ-парка</p>
+
+  <label for="login">Логин</label>
+  <input id="login" name="login" autocomplete="username" required placeholder="admin">
+
+  <label for="password">Пароль</label>
+  <input id="password" name="password" type="password" autocomplete="current-password" required>
+
+  <button id="submit" type="submit">Войти</button>
+  <div class="msg" id="msg" role="alert"></div>
+
+  <div class="hint">
+    Внешний доступ по токену: вставьте токен в поле «Логин» и оставьте пароль пустым.
+    Токен выдаёт главный администратор и действует 72 часа.<br>
+    Рабочий адрес дашборда (одинаково из офиса и извне, TLS валиден):
+    <code>https://a.mdlp.gk-kd.ru:24112/</code>
+  </div>
+</form>
+
+<script src="./assets/login-debd752a.js"></script>
+</body>
+</html>
